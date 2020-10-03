@@ -23,13 +23,4 @@ export default function (api: IApi) {
       }),
     });
   });
-
-  // 这个加进去会导致 patchRoutes 在最初就执行，但期望的是在 render 后执行
-  // 所以先不加
-  // api.addUmiExports(() => {
-  //   return {
-  //     specifiers: ['routes'],
-  //     source: `./routes`,
-  //   };
-  // });
 }

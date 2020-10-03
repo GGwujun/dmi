@@ -56,6 +56,23 @@ export default function (api: IApi) {
         runtimePath,
       }),
     });
+    api.writeTmpFile({
+      path: 'nuxt/history.ts',
+      content: Mustache.render(historyTpl, {
+        creator: `create${lodash.upperFirst(type)}History`,
+        options: JSON.stringify(
+          {
+            ...options,
+            ...(type === 'browser' || type === 'hash'
+              ? { basename: api.config.base }
+              : {}),
+          },
+          null,
+          2,
+        ),
+        runtimePath,
+      }),
+    });
   });
 
   api.addUmiExports(() => {

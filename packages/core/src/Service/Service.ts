@@ -183,23 +183,6 @@ export default class Service extends EventEmitter {
     // we should have the final hooksByPluginId which is added with api.register()
     await this.initPresetsAndPlugins();
 
-    // collect false configs, then add to this.skipPluginIds
-    // skipPluginIds include two parts:
-    // 1. api.skipPlugins()
-    // 2. user config with the `false` value
-    // Object.keys(this.hooksByPluginId).forEach(pluginId => {
-    //   const { key } = this.plugins[pluginId];
-    //   if (this.getPluginOptsWithKey(key) === false) {
-    //     this.skipPluginIds.add(pluginId);
-    //   }
-    // });
-
-    // delete hooks from this.hooksByPluginId with this.skipPluginIds
-    // for (const pluginId of this.skipPluginIds) {
-    //   if (this.hooksByPluginId[pluginId]) delete this.hooksByPluginId[pluginId];
-    //   delete this.plugins[pluginId];
-    // }
-
     // hooksByPluginId -> hooks
     // hooks is mapped with hook key, prepared for applyPlugins()
     this.setStage(ServiceStage.initHooks);

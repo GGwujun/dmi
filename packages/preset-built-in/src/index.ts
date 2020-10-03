@@ -16,6 +16,9 @@ export default function () {
       require.resolve('./plugins/generateFiles/core/configTypes'),
       require.resolve('./plugins/generateFiles/umi'),
 
+      // generate nuxt file
+      require.resolve('./plugins/generateFiles/nuxt/history'),
+
       // bundle configs
       require.resolve('./plugins/features/alias'),
       require.resolve('./plugins/features/analyze'),
