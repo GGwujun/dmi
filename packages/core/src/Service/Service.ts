@@ -180,11 +180,16 @@ export default class Service extends EventEmitter {
 
   async init() {
     this.setStage(ServiceStage.init);
-    // we should have the final hooksByPluginId which is added with api.register()
+    // api.register()方法最终在hooksByPluginId中添加hook
     await this.initPresetsAndPlugins();
 
     // hooksByPluginId -> hooks
     // hooks is mapped with hook key, prepared for applyPlugins()
+    // hooksByPluginId是以插件id为key的map，存储的是hooks
+    // hooks是一个以hook为值的数组map
+    /**
+     * this.hooksByPluginId[id] = [{key:'ddd',fn:()=>{}}] --> this.hooks[key] = [{key:'ddd',pluginId:'',fn:()=>{}}]
+     */
     this.setStage(ServiceStage.initHooks);
     Object.keys(this.hooksByPluginId).forEach((id) => {
       const hooks = this.hooksByPluginId[id];

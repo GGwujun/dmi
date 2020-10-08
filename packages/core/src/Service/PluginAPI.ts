@@ -31,6 +31,7 @@ export default class PluginAPI {
   }
 
   // TODO: reversed keys
+  // 在service注册插件的时候执行，用做插件描述，插件/插件集的id、key、配置信息、启动方式等
   describe({
     id,
     key,
@@ -69,6 +70,7 @@ export default class PluginAPI {
     plugins[this.id].enableBy = enableBy || EnableBy.register;
   }
 
+  //为api.applyPlugins注册可供其使用的 hook。
   register(hook: IHook) {
     assert(
       hook.key && typeof hook.key === 'string',
@@ -83,6 +85,7 @@ export default class PluginAPI {
     ).concat(hook);
   }
 
+  //注册命令
   registerCommand(command: ICommand) {
     const { name, alias } = command;
     assert(

@@ -18,6 +18,10 @@ export default function () {
 
       // generate nuxt file
       require.resolve('./plugins/generateFiles/nuxt/history'),
+      require.resolve('./plugins/generateFiles/nuxt/routes'),
+      require.resolve('./plugins/generateFiles/nuxt/app'),
+      require.resolve('./plugins/generateFiles/nuxt'),
+      require.resolve('./plugins/generateFiles/nuxt/client'),
 
       // bundle configs
       require.resolve('./plugins/features/alias'),

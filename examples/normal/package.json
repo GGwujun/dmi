@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "umi dev",
-    "build": "umi build"
+    "build": "umi build",
+    "webpack":"umi webpack"
   },
   "private": true,
   "peerDependencies": {

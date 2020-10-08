@@ -150,6 +150,7 @@ export default (api: IApi) => {
         bundleConfigs,
         bundleImplementor,
       } = await getBundleAndConfigs({ api, port });
+
       const opts: IServerOpts = bundler.setupDevServerOpts({
         bundleConfigs: bundleConfigs,
         bundleImplementor,

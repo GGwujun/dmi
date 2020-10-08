@@ -8,11 +8,8 @@ class Service extends CoreService {
 
     super({
       ...opts,
-      presets: [
-        require.resolve('@umijs/preset-built-in'),
-        ...(opts.presets || []),
-      ],
-      plugins: [require.resolve('./plugins/umiAlias'), ...(opts.plugins || [])],
+      presets: [require.resolve('@umijs/preset-built-in')],
+      plugins: [require.resolve('./plugins/umiAlias')],
     });
   }
 }

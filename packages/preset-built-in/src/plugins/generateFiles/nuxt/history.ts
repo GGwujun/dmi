@@ -9,7 +9,7 @@ export default function (api: IApi) {
   } = api;
 
   api.describe({
-    key: 'history',
+    key: 'nuxt_history',
     config: {
       default: { type: 'browser' },
       schema(joi) {
@@ -40,7 +40,7 @@ export default function (api: IApi) {
     const { type, options = {} } = history;
 
     api.writeTmpFile({
-      path: 'core/history.ts',
+      path: 'nuxt/history.ts',
       content: Mustache.render(historyTpl, {
         creator: `create${lodash.upperFirst(type)}History`,
         options: JSON.stringify(
@@ -56,43 +56,43 @@ export default function (api: IApi) {
         runtimePath,
       }),
     });
-    // api.writeTmpFile({
-    //   path: 'nuxt/history.ts',
-    //   content: Mustache.render(historyTpl, {
-    //     creator: `create${lodash.upperFirst(type)}History`,
-    //     options: JSON.stringify(
-    //       {
-    //         ...options,
-    //         ...(type === 'browser' || type === 'hash'
-    //           ? { basename: api.config.base }
-    //           : {}),
-    //       },
-    //       null,
-    //       2,
-    //     ),
-    //     runtimePath,
-    //   }),
-    // });
+    api.writeTmpFile({
+      path: 'nuxt/history.ts',
+      content: Mustache.render(historyTpl, {
+        creator: `create${lodash.upperFirst(type)}History`,
+        options: JSON.stringify(
+          {
+            ...options,
+            ...(type === 'browser' || type === 'hash'
+              ? { basename: api.config.base }
+              : {}),
+          },
+          null,
+          2,
+        ),
+        runtimePath,
+      }),
+    });
   });
 
-  api.addUmiExports(() => {
-    // @ts-ignore
-    if (api.config.history === false) return [];
+  // api.addUmiExports(() => {
+  //   // @ts-ignore
+  //   if (api.config.history === false) return [];
 
-    if (api.config.runtimeHistory) {
-      return {
-        specifiers: [
-          'history',
-          'setCreateHistoryOptions',
-          'getCreateHistoryOptions',
-        ],
-        source: `./history`,
-      };
-    }
+  //   if (api.config.runtimeHistory) {
+  //     return {
+  //       specifiers: [
+  //         'history',
+  //         'setCreateHistoryOptions',
+  //         'getCreateHistoryOptions',
+  //       ],
+  //       source: `./history`,
+  //     };
+  //   }
 
-    return {
-      specifiers: ['history'],
-      source: `./history`,
-    };
-  });
+  //   return {
+  //     specifiers: ['history'],
+  //     source: `./history`,
+  //   };
+  // });
 }
