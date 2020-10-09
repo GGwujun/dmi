@@ -93,12 +93,6 @@ interface IHtmlUtils extends Html {
 }
 
 export interface IApi extends PluginAPI {
-  describe(arg0: { key: string; config: {}; enableBy: () => any });
-  registerCommand(arg0: {
-    name: string;
-    description: string;
-    fn(): Promise<any>;
-  });
   // properties
   paths: typeof Service.prototype.paths;
   cwd: typeof Service.prototype.cwd;

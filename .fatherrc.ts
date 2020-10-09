@@ -3,8 +3,8 @@ import { join } from 'path';
 
 // utils must build before core
 // runtime must build before renderer-react
-const headPkgs = ['utils', 'ast', 'runtime', 'core', 'server'];
-const tailPkgs = ['umi', 'test-utils'];
+const headPkgs = ['utils', 'runtime', 'core'];
+const tailPkgs = ['umi'];
 const otherPkgs = readdirSync(join(__dirname, 'packages')).filter(
   (pkg) =>
     pkg.charAt(0) !== '.' && !headPkgs.includes(pkg) && !tailPkgs.includes(pkg),

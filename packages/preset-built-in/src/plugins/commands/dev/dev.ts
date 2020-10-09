@@ -49,149 +49,151 @@ export default (api: IApi) => {
       console.log(chalk.cyan('Starting the development server...'));
       process.send?.({ type: 'UPDATE_PORT', port });
 
+      process.exit();
+
       // enable https, HTTP/2 by default when using --https
-      const isHTTPS = process.env.HTTPS || args?.https;
+      // const isHTTPS = process.env.HTTPS || args?.https;
 
-      cleanTmpPathExceptCache({
-        absTmpPath: paths.absTmpPath!,
-      });
-      const watch = process.env.WATCH !== 'none';
+      // cleanTmpPathExceptCache({
+      //   absTmpPath: paths.absTmpPath!,
+      // });
+      // const watch = process.env.WATCH !== 'none';
 
-      // generate files
-      const unwatchGenerateFiles = await generateFiles({ api, watch });
-      if (unwatchGenerateFiles) unwatchs.push(unwatchGenerateFiles);
+      // // generate files
+      // const unwatchGenerateFiles = await generateFiles({ api, watch });
+      // if (unwatchGenerateFiles) unwatchs.push(unwatchGenerateFiles);
 
-      if (watch) {
-        // watch pkg changes
-        const unwatchPkg = watchPkg({
-          cwd: api.cwd,
-          onChange() {
-            console.log();
-            api.logger.info(`Plugins in package.json changed.`);
-            api.restartServer();
-          },
-        });
-        unwatchs.push(unwatchPkg);
+      // if (watch) {
+      //   // watch pkg changes
+      //   const unwatchPkg = watchPkg({
+      //     cwd: api.cwd,
+      //     onChange() {
+      //       console.log();
+      //       api.logger.info(`Plugins in package.json changed.`);
+      //       api.restartServer();
+      //     },
+      //   });
+      //   unwatchs.push(unwatchPkg);
 
-        // watch config change
-        const unwatchConfig = api.service.configInstance.watch({
-          userConfig: api.service.userConfig,
-          onChange: async ({ pluginChanged, userConfig, valueChanged }) => {
-            if (pluginChanged.length) {
-              console.log();
-              api.logger.info(
-                `Plugins of ${pluginChanged
-                  .map((p) => p.key)
-                  .join(', ')} changed.`,
-              );
-              api.restartServer();
-            }
-            if (valueChanged.length) {
-              let reload = false;
-              let regenerateTmpFiles = false;
-              const fns: Function[] = [];
-              const reloadConfigs: string[] = [];
-              valueChanged.forEach(({ key, pluginId }) => {
-                const { onChange } = api.service.plugins[pluginId].config || {};
-                if (onChange === api.ConfigChangeType.regenerateTmpFiles) {
-                  regenerateTmpFiles = true;
-                }
-                if (!onChange || onChange === api.ConfigChangeType.reload) {
-                  reload = true;
-                  reloadConfigs.push(key);
-                }
-                if (typeof onChange === 'function') {
-                  fns.push(onChange);
-                }
-              });
+      //   // watch config change
+      //   const unwatchConfig = api.service.configInstance.watch({
+      //     userConfig: api.service.userConfig,
+      //     onChange: async ({ pluginChanged, userConfig, valueChanged }) => {
+      //       if (pluginChanged.length) {
+      //         console.log();
+      //         api.logger.info(
+      //           `Plugins of ${pluginChanged
+      //             .map((p) => p.key)
+      //             .join(', ')} changed.`,
+      //         );
+      //         api.restartServer();
+      //       }
+      //       if (valueChanged.length) {
+      //         let reload = false;
+      //         let regenerateTmpFiles = false;
+      //         const fns: Function[] = [];
+      //         const reloadConfigs: string[] = [];
+      //         valueChanged.forEach(({ key, pluginId }) => {
+      //           const { onChange } = api.service.plugins[pluginId].config || {};
+      //           if (onChange === api.ConfigChangeType.regenerateTmpFiles) {
+      //             regenerateTmpFiles = true;
+      //           }
+      //           if (!onChange || onChange === api.ConfigChangeType.reload) {
+      //             reload = true;
+      //             reloadConfigs.push(key);
+      //           }
+      //           if (typeof onChange === 'function') {
+      //             fns.push(onChange);
+      //           }
+      //         });
 
-              if (reload) {
-                console.log();
-                api.logger.info(`Config ${reloadConfigs.join(', ')} changed.`);
-                api.restartServer();
-              } else {
-                api.service.userConfig = api.service.configInstance.getUserConfig();
+      //         if (reload) {
+      //           console.log();
+      //           api.logger.info(`Config ${reloadConfigs.join(', ')} changed.`);
+      //           api.restartServer();
+      //         } else {
+      //           api.service.userConfig = api.service.configInstance.getUserConfig();
 
-                // TODO: simplify, 和 Service 里的逻辑重复了
-                // 需要 Service 露出方法
-                const defaultConfig = await api.applyPlugins({
-                  key: 'modifyDefaultConfig',
-                  type: api.ApplyPluginsType.modify,
-                  initialValue: await api.service.configInstance.getDefaultConfig(),
-                });
-                api.service.config = await api.applyPlugins({
-                  key: 'modifyConfig',
-                  type: api.ApplyPluginsType.modify,
-                  initialValue: api.service.configInstance.getConfig({
-                    defaultConfig,
-                  }) as any,
-                });
+      //           // TODO: simplify, 和 Service 里的逻辑重复了
+      //           // 需要 Service 露出方法
+      //           const defaultConfig = await api.applyPlugins({
+      //             key: 'modifyDefaultConfig',
+      //             type: api.ApplyPluginsType.modify,
+      //             initialValue: await api.service.configInstance.getDefaultConfig(),
+      //           });
+      //           api.service.config = await api.applyPlugins({
+      //             key: 'modifyConfig',
+      //             type: api.ApplyPluginsType.modify,
+      //             initialValue: api.service.configInstance.getConfig({
+      //               defaultConfig,
+      //             }) as any,
+      //           });
 
-                if (regenerateTmpFiles) {
-                  await generateFiles({ api });
-                } else {
-                  fns.forEach((fn) => fn());
-                }
-              }
-            }
-          },
-        });
-        unwatchs.push(unwatchConfig);
-      }
+      //           if (regenerateTmpFiles) {
+      //             await generateFiles({ api });
+      //           } else {
+      //             fns.forEach((fn) => fn());
+      //           }
+      //         }
+      //       }
+      //     },
+      //   });
+      //   unwatchs.push(unwatchConfig);
+      // }
 
-      // delay dev server 启动，避免重复 compile
-      // https://github.com/webpack/watchpack/issues/25
-      // https://github.com/yessky/webpack-mild-compile
-      await delay(500);
+      // // delay dev server 启动，避免重复 compile
+      // // https://github.com/webpack/watchpack/issues/25
+      // // https://github.com/yessky/webpack-mild-compile
+      // await delay(500);
 
-      // dev
-      const {
-        bundler,
-        bundleConfigs,
-        bundleImplementor,
-      } = await getBundleAndConfigs({ api, port });
+      // // dev
+      // const {
+      //   bundler,
+      //   bundleConfigs,
+      //   bundleImplementor,
+      // } = await getBundleAndConfigs({ api, port });
 
-      const opts: IServerOpts = bundler.setupDevServerOpts({
-        bundleConfigs: bundleConfigs,
-        bundleImplementor,
-      });
+      // const opts: IServerOpts = bundler.setupDevServerOpts({
+      //   bundleConfigs: bundleConfigs,
+      //   bundleImplementor,
+      // });
 
-      const beforeMiddlewares = await api.applyPlugins({
-        key: 'addBeforeMiddewares',
-        type: api.ApplyPluginsType.add,
-        initialValue: [],
-        args: {},
-      });
-      const middlewares = await api.applyPlugins({
-        key: 'addMiddewares',
-        type: api.ApplyPluginsType.add,
-        initialValue: [],
-        args: {},
-      });
+      // const beforeMiddlewares = await api.applyPlugins({
+      //   key: 'addBeforeMiddewares',
+      //   type: api.ApplyPluginsType.add,
+      //   initialValue: [],
+      //   args: {},
+      // });
+      // const middlewares = await api.applyPlugins({
+      //   key: 'addMiddewares',
+      //   type: api.ApplyPluginsType.add,
+      //   initialValue: [],
+      //   args: {},
+      // });
 
-      server = new Server({
-        ...opts,
-        compress: true,
-        https: !!isHTTPS,
-        headers: {
-          'access-control-allow-origin': '*',
-        },
-        proxy: api.config.proxy,
-        beforeMiddlewares,
-        afterMiddlewares: [
-          ...middlewares,
-          createRouteMiddleware({ api, sharedMap }),
-        ],
-        ...(api.config.devServer || {}),
-      });
-      const listenRet = await server.listen({
-        port,
-        hostname,
-      });
-      return {
-        ...listenRet,
-        destroy,
-      };
+      // server = new Server({
+      //   ...opts,
+      //   compress: true,
+      //   https: !!isHTTPS,
+      //   headers: {
+      //     'access-control-allow-origin': '*',
+      //   },
+      //   proxy: api.config.proxy,
+      //   beforeMiddlewares,
+      //   afterMiddlewares: [
+      //     ...middlewares,
+      //     createRouteMiddleware({ api, sharedMap }),
+      //   ],
+      //   ...(api.config.devServer || {}),
+      // });
+      // const listenRet = await server.listen({
+      //   port,
+      //   hostname,
+      // });
+      // return {
+      //   ...listenRet,
+      //   destroy,
+      // };
     },
   });
 
