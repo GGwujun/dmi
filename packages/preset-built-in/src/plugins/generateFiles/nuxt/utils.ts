@@ -11,10 +11,10 @@ export default function (api: IApi) {
   } = api;
 
   api.onGenerateFiles(async (args) => {
-    const routesTpl = readFileSync(join(__dirname, 'router.tpl'), 'utf-8');
+    const routesTpl = readFileSync(join(__dirname, 'urils.tpl'), 'utf-8');
     const routes = await api.getRoutes();
     api.writeTmpFile({
-      path: 'nuxt/router.ts',
+      path: 'nuxt/urils.ts',
       content: Mustache.render(routesTpl, {
         routes: new Route().getJSON({ routes, config: api.config, cwd }),
         runtimePath,

@@ -9,14 +9,17 @@ export default function (api: IApi) {
   } = api;
 
   api.onGenerateFiles(async (args) => {
-    const umiTpl = readFileSync(join(__dirname, 'App.tpl'), 'utf-8');
+    const umiTpl = readFileSync(
+      join(__dirname, 'router.scrollBehavior.tpl'),
+      'utf-8',
+    );
     const rendererPath = await api.applyPlugins({
       key: 'modifyRendererPath',
       type: api.ApplyPluginsType.modify,
       initialValue: '',
     });
     api.writeTmpFile({
-      path: 'nuxt/App.ts',
+      path: 'nuxt/router.scrollBehavior.ts',
       content: Mustache.render(umiTpl, {
         // @ts-ignore
         enableTitle: api.config.title !== false,
