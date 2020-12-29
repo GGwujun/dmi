@@ -10,7 +10,6 @@ export default function () {
       // generate nuxt file
       require.resolve('./plugins/generateFiles/nuxt/router'),
       require.resolve('./plugins/generateFiles/nuxt/App'),
-      require.resolve('./plugins/generateFiles/nuxt'),
       require.resolve('./plugins/generateFiles/nuxt/client'),
       require.resolve('./plugins/generateFiles/nuxt/middleware'),
       require.resolve('./plugins/generateFiles/nuxt/index'),
@@ -49,7 +48,7 @@ export default function () {
       // require.resolve('./plugins/features/mountElementId'),
       // require.resolve('./plugins/features/mpa'),
       // require.resolve('./plugins/features/nodeModulesTransform'),
-      // require.resolve('./plugins/features/outputPath'),
+      require.resolve('./plugins/features/outputPath'),
       // require.resolve('./plugins/features/plugins'),
       // require.resolve('./plugins/features/postcssLoader'),
       // require.resolve('./plugins/features/presets'),

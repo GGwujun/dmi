@@ -39,7 +39,7 @@ export async function getBundleAndConfigs({
         port,
         hot: type === BundlerConfigType.csr && process.env.HMR !== 'none',
         entry: {
-          umi: join(api.paths.absTmpPath!, 'umi.ts'),
+          client: join(api.paths.absTmpPath!, 'nuxt/client.ts'),
         },
         // @ts-ignore
         bundleImplementor,

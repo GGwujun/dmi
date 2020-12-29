@@ -11,7 +11,7 @@ export default function (api: IApi) {
   } = api;
 
   api.onGenerateFiles(async (args) => {
-    const routesTpl = readFileSync(join(__dirname, 'urils.tpl'), 'utf-8');
+    const routesTpl = readFileSync(join(__dirname, 'utils.tpl'), 'utf-8');
     const routes = await api.getRoutes();
     api.writeTmpFile({
       path: 'nuxt/urils.ts',
