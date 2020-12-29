@@ -7,21 +7,15 @@ export default function () {
       // misc
       require.resolve('./plugins/routes'),
 
-      // generate files
-      // require.resolve('./plugins/generateFiles/core/history'),
-      // require.resolve('./plugins/generateFiles/core/plugin'),
-      // require.resolve('./plugins/generateFiles/core/polyfill'),
-      // require.resolve('./plugins/generateFiles/core/routes'),
-      // require.resolve('./plugins/generateFiles/core/umiExports'),
-      // require.resolve('./plugins/generateFiles/core/configTypes'),
-      // require.resolve('./plugins/generateFiles/umi'),
-
       // generate nuxt file
-      require.resolve('./plugins/generateFiles/nuxt/history'),
-      require.resolve('./plugins/generateFiles/nuxt/routes'),
-      require.resolve('./plugins/generateFiles/nuxt/app'),
+      require.resolve('./plugins/generateFiles/nuxt/router'),
+      require.resolve('./plugins/generateFiles/nuxt/App'),
       require.resolve('./plugins/generateFiles/nuxt'),
       require.resolve('./plugins/generateFiles/nuxt/client'),
+      require.resolve('./plugins/generateFiles/nuxt/middleware'),
+      require.resolve('./plugins/generateFiles/nuxt/index'),
+      require.resolve('./plugins/generateFiles/nuxt/store'),
+      require.resolve('./plugins/generateFiles/nuxt/utils'),
 
       // bundle configs
       // require.resolve('./plugins/features/alias'),
